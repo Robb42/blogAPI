@@ -4,12 +4,16 @@
   "description": "CRUD API for a blogging platform",
   "main": "index.js",
   "scripts": {
+    "test": "mocha --exit",
     "start": "nodemon server.js"
   },
   "author": "Rob Bertini",
   "license": "ISC",
   "dependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "express": "^4.16.3",
+    "mocha": "^5.2.0",
     "morgan": "^1.9.0",
     "uuid": "^3.3.2"
   }
