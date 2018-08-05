@@ -20,6 +20,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+    console.log(req.params.id);
+    console.log(BlogPostsAPI.findById(req.params.id));
     BlogPostsAPI
     .findById(req.params.id)
     .then(blogpost => res.json(blogpost.serialize()))
@@ -30,7 +32,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', jsonParser, (req, res) => {
-    const requiredFields = ['title', 'content', 'author', 'publishDate'];
+    const requiredFields = ['title', 'content', 'author'];
     for (let i=0; i < requiredFields.length; i++) {
         const field = requiredFields[i];
         if (!(field in req.body)) {
