@@ -1,6 +1,34 @@
 const uuid = require('uuid');
+const mongoose = require("mongoose");
 
-// This module provides volatile storage, using a `BlogPost`
+const blogPostSchema = mongoose.Schema({
+  title: {type: String, required: true},
+  author: {
+    firstName: String,
+    lastName: String
+  },
+  content: {type: String, required: true}
+});
+
+blogPostSchema.virtual("fullNameString").get(function () {
+  return `${this.author.firstName} ${this.author.lastName}`.trim();
+});
+
+blogPostSchema.methods.serialize = function () {
+  return {
+    id: this._id,
+    title: this.title,
+    author: this.fullNameString,
+    content: this.content
+  };
+};
+
+const BlogPostsAPI = mongoose.model("BlogPostsAPI", blogPostSchema);
+
+module.exports = {BlogPostsAPI};
+
+
+/*// This module provides volatile storage, using a `BlogPost`
 // model. We haven't learned about databases yet, so for now
 // we're using in-memory storage. This means each time the app stops, our storage
 // gets erased.
@@ -67,4 +95,4 @@ function createBlogPostsModel() {
 }
 
 
-module.exports = {BlogPosts: createBlogPostsModel()};
+module.exports = {BlogPosts: createBlogPostsModel()};*/
