@@ -2,7 +2,7 @@
   "name": "blogapi",
   "version": "1.0.0",
   "description": "CRUD API for a blogging platform",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha --exit",
     "start": "nodemon server.js"
