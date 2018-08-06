@@ -7,7 +7,7 @@ const jsonParser = bodyParser.json();
 mongoose.Promise = global.Promise;
 
 const {PORT, DATABASE_URL} = require('./config');
-const {BlogPostsAPI} = require("./models");
+const {BlogPostsAPI, Author} = require("./models");
 
 const app = express();
 
@@ -17,9 +17,15 @@ app.use(express.json());
 app.get('/blog-posts', (req, res) => {
     BlogPostsAPI.find()
     .then(blogposts => {
-        res.json({
+
+        res.json(
+            blogposts.map(blogpost => { 
+                return { id: blogpost._id, author: blogpost.authorName, title: blogpost.title }; 
+            }));
+
+        /*res.json({
             blogposts: blogposts.map(blogposts => blogposts.serialize())
-        });
+        });*/
     })
     .catch(err => {
         console.error(err);
@@ -81,7 +87,7 @@ app.put('/blog-posts/:id', jsonParser, (req, res) => {
     });
     BlogPostsAPI
     .findByIdAndUpdate(req.params.id, {$set: toUpdate})
-    .then(blogpost => res.status(204).end())
+    .then(blogpost => res.status(204).json(blogpost.serialize()))
     .catch(err => res.status(500).json({message: "Internal server error"}));
 });
 
@@ -98,6 +104,8 @@ app.use("*", function(req,res) {
 let server;
 
 function runServer(databaseUrl, port = PORT) {
+    //console.log(databaseUrl);
+    //console.log(port);
     return new Promise((resolve, reject) => {
         mongoose.connect(databaseUrl, err => {
             if (err) {
